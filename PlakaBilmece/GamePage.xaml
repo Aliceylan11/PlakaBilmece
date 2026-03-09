@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlakaBilmece.GamePage"
+             BackgroundColor="#121212"
+             NavigationPage.HasNavigationBar="False">
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto, Auto, Auto, Auto" Padding="15" RowSpacing="10">
+
+            <Grid Grid.Row="0" ColumnDefinitions="*, *" Padding="5,0">
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Start" Spacing="0">
+                    <Label Text="KALAN SÜRE" FontSize="11" TextColor="Gray"/>
+                    <Label x:Name="lblGenelSure" Text="02:00" FontSize="26" FontAttributes="Bold" TextColor="White"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="End" Spacing="0">
+                    <Label Text="PUAN" FontSize="11" TextColor="Gray" HorizontalOptions="End"/>
+                    <Label x:Name="lblPuan" Text="0" FontSize="26" FontAttributes="Bold" TextColor="Gold" HorizontalOptions="End"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <ProgressBar x:Name="pbSoruSuresi" Grid.Row="1" Progress="1.0" 
+                         ProgressColor="LimeGreen" HeightRequest="12" Margin="0,5,0,0"/>
+
+            <VerticalStackLayout Grid.Row="2" Spacing="5" Margin="0,20">
+                <Label x:Name="lblSoruBaslik" Text="İlin Plakası Nedir?" FontSize="16" 
+                       TextColor="LightSkyBlue" HorizontalOptions="Center"/>
+                <Label x:Name="lblSoru" Text="ŞEHİR ADI" FontSize="38" 
+                       FontAttributes="Bold" TextColor="Gold" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Row="3" Spacing="12">
+                <Entry x:Name="txtCevap" 
+                       Placeholder="Plaka" 
+                       Keyboard="Numeric" 
+                       MaxLength="2"
+                       FontSize="22" 
+                       HorizontalTextAlignment="Center" 
+                       BackgroundColor="#1A1A1A" 
+                       TextColor="White"
+                       HeightRequest="55"/>
+
+                <Button x:Name="btnCevapla" 
+                        Text="CEVAPLA" 
+                        Clicked="OnCevaplaClicked"
+                        BackgroundColor="#1E88E5" 
+                        TextColor="White" 
+                        FontSize="18" 
+                        FontAttributes="Bold" 
+                        HeightRequest="55" 
+                        CornerRadius="12"/>
+
+                <BoxView HeightRequest="20" Color="Transparent" />
+            </VerticalStackLayout>
+
+        </Grid>
+    </ScrollView>
+</ContentPage>
