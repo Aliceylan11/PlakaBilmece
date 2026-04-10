@@ -1,4 +1,4 @@
-using Microsoft.Maui.Controls;
+ï»¿using Microsoft.Maui.Controls;
 using System;
 using System.Collections.Generic;
 
@@ -6,28 +6,53 @@ namespace PlakaBilmece;
 
 public partial class ResultPage : ContentPage
 {
-    // Constructor'a "int puan" parametresi eklendi
-    public ResultPage(List<string> bilinenler, List<string> bilemediklerim, int puan)
+    string _oyuncuAdi;
+    int _toplamPuan;
+
+    public ResultPage(List<string> bilinenler, List<string> bilemediklerim, int puan, string oyuncuAdi)
     {
         InitializeComponent();
 
+        _oyuncuAdi = oyuncuAdi;
+        _toplamPuan = puan;
+
+        // Ekrana Temel Bilgileri YazdÄ±r
+        lblOyuncuMesaj.Text = $"TEBRÄ°KLER {oyuncuAdi.ToUpper()}!";
         lblDogruSayisi.Text = bilinenler.Count.ToString();
         lblKacanSayisi.Text = bilemediklerim.Count.ToString();
-        lblFinalPuan.Text = puan.ToString(); // Puaný ekrana yazdýr
+        lblFinalPuan.Text = puan.ToString();
 
         cvBilinenler.ItemsSource = bilinenler;
         cvBilemediklerim.ItemsSource = bilemediklerim;
+
+        // C ADIMI: Rekor KontrolÃ¼ ve Kaydetme
+        RekorKontroluYap();
+    }
+
+    private void RekorKontroluYap()
+    {
+        // Telefon hafÄ±zasÄ±ndan mevcut rekoru Ã§ek
+        int mevcutRekor = Preferences.Default.Get("Highscore", 0);
+
+        if (_toplamPuan > mevcutRekor)
+        {
+            // Yeni Rekor KÄ±rÄ±ldÄ±!
+            Preferences.Default.Set("Highscore", _toplamPuan);
+            Preferences.Default.Set("HighscorePlayer", _oyuncuAdi);
+
+            // GÃ¶rsel geri bildirim ver
+            lblRekorMesaj.IsVisible = true;
+        }
     }
 
     private async void OnTekrarOynaClicked(object sender, EventArgs e)
     {
-        // Ana menüye deðil, direkt oyunun içine geri döndürür. (Biraz çetrefilli olduðu için þimdilik ana menüye yolluyoruz)
+        // Direkt ana sayfaya dÃ¶n (Yeni oyuna baÅŸlama mantÄ±ÄŸÄ± root Ã¼zerinden kurulur)
         await Navigation.PopToRootAsync();
     }
 
     private async void OnAnaMenuClicked(object sender, EventArgs e)
     {
-        // En baþtaki Ana Menü (MainPage) sayfasýna geri döner
         await Navigation.PopToRootAsync();
     }
 }

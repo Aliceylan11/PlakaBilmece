@@ -1,4 +1,4 @@
-using Microsoft.Maui.Controls;
+ï»¿using Microsoft.Maui.Controls;
 using System;
 using System.Collections.Generic;
 
@@ -13,19 +13,24 @@ public partial class GamePage : ContentPage
 
     Soru aktifSoru;
     string aktifMod;
+    string _oyuncuAdi; // A.b AdÄ±mÄ±: Ä°smi burada tutuyoruz
     Random rnd = new Random();
 
-    // Zamanlayýcýlar
+    // ZamanlayÄ±cÄ±lar
     IDispatcherTimer genelTimer;
     IDispatcherTimer soruTimer;
 
-    int genelSureSaniye = 120; // 2 Dakika
-    int soruSureSaniye = 100;  // 10 saniye
-    int toplamPuan = 0;        // YENÝ EKLENEN PUAN DEÐÝÞKENÝ
-    public GamePage(string mod)
+    int genelSureSaniye = 120;
+    int soruSureSaniye = 100;
+    int toplamPuan = 0;
+    int comboCount = 0; // B AdÄ±mÄ±: Seri (Combo) sayacÄ±
+
+    // Constructor: Hem modu hem de oyuncu adÄ±nÄ± alÄ±yor
+    public GamePage(string mod, string oyuncuAdi)
     {
         InitializeComponent();
         aktifMod = mod;
+        _oyuncuAdi = oyuncuAdi;
 
         SoruHavuzunuHazirla();
         ZamanlayicilariHazirla();
@@ -34,37 +39,30 @@ public partial class GamePage : ContentPage
 
     private void SoruHavuzunuHazirla()
     {
-        // VERÝTABANINDAN VERÝLERÝ ÇEKÝYORUZ!
         if (aktifMod == "Il")
         {
-            lblSoruBaslik.Text = "Ýlin Plakasý Nedir?";
+            lblSoruBaslik.Text = "Ä°lin PlakasÄ± Nedir?";
             soruHavuzu = Veritabani.TumIlleriGetir();
         }
         else if (aktifMod == "Ilce")
         {
-            lblSoruBaslik.Text = "Ýlçenin Plakasý Nedir?";
+            lblSoruBaslik.Text = "Ä°lÃ§enin PlakasÄ± Nedir?";
             soruHavuzu = Veritabani.TumIlceleriGetir();
         }
     }
 
     private void ZamanlayicilariHazirla()
     {
-        // 1. Genel Süre Sayacý (1 saniyede bir düþer)
         genelTimer = Dispatcher.CreateTimer();
         genelTimer.Interval = TimeSpan.FromSeconds(1);
         genelTimer.Tick += (s, e) =>
         {
             genelSureSaniye--;
             lblGenelSure.Text = TimeSpan.FromSeconds(genelSureSaniye).ToString(@"mm\:ss");
-
-            if (genelSureSaniye <= 0)
-            {
-                OyunuBitir();
-            }
+            if (genelSureSaniye <= 0) OyunuBitir();
         };
         genelTimer.Start();
 
-        // 2. Soru Süresi Çubuðu (Çok hýzlý düþer, animasyon hissi verir)
         soruTimer = Dispatcher.CreateTimer();
         soruTimer.Interval = TimeSpan.FromMilliseconds(100);
         soruTimer.Tick += (s, e) =>
@@ -72,71 +70,76 @@ public partial class GamePage : ContentPage
             soruSureSaniye--;
             pbSoruSuresi.Progress = soruSureSaniye / 100.0;
 
-            // Çubuk Rengi
             if (pbSoruSuresi.Progress < 0.3) pbSoruSuresi.ProgressColor = Colors.Red;
             else if (pbSoruSuresi.Progress < 0.6) pbSoruSuresi.ProgressColor = Colors.Orange;
 
-            // 10 Saniye Dolduysa
-            if (soruSureSaniye <= 0)
-            {
-                HataliCevapIslemi();
-            }
+            if (soruSureSaniye <= 0) HataliCevapIslemi();
         };
     }
 
     private void YeniSoruGetir()
     {
-        // Havuzda soru bittiyse (Oyuncu 2 dakika dolmadan hepsini bildiyse)
         if (soruHavuzu.Count == 0)
         {
             OyunuBitir();
             return;
         }
 
-        // Rastgele soru çek
         int index = rnd.Next(soruHavuzu.Count);
         aktifSoru = soruHavuzu[index];
         lblSoru.Text = aktifSoru.Ad;
-
-        // Sorulaný listeden at
         soruHavuzu.RemoveAt(index);
 
-        // Arayüzü Sýfýrla
         txtCevap.Text = "";
         pbSoruSuresi.Progress = 1.0;
         pbSoruSuresi.ProgressColor = Colors.LimeGreen;
 
-        // Soru sayacýný baþtan baþlat
         soruSureSaniye = 100;
         soruTimer.Start();
-
-        txtCevap.Focus(); // Klavyeyi hazýr tut
+        txtCevap.Focus();
     }
 
     private void OnCevaplaClicked(object sender, EventArgs e)
     {
         if (string.IsNullOrWhiteSpace(txtCevap.Text)) return;
 
+        // B ADIMI: DoÄŸru mu YanlÄ±ÅŸ mÄ± kontrolÃ¼ burada birleÅŸti
         if (txtCevap.Text == aktifSoru.Plaka)
         {
-            // DOÐRU BÝLDÝ (+5 Puan)
-            toplamPuan += 5;
-            lblPuan.Text = toplamPuan.ToString();
-
-            soruTimer.Stop();
-            bilinenler.Add($"{aktifSoru.Ad} ({aktifSoru.Plaka})");
-            YeniSoruGetir();
+            DogruCevapIslemi();
         }
         else
         {
-            // YANLIÞ BÝLDÝ (-2 Puan)
             HataliCevapIslemi();
         }
     }
 
+    private void DogruCevapIslemi()
+    {
+        comboCount++;
+        int kazanilanPuan = 5;
+
+        if (comboCount >= 3)
+        {
+            kazanilanPuan = 10;
+            // COMBO ETÄ°KETÄ°NÄ° GÃ–STER VE GÃœNCELLE
+            lblCombo.Text = $"COMBO X{comboCount - 1} ðŸ”¥";
+            lblCombo.IsVisible = true;
+        }
+
+        toplamPuan += kazanilanPuan;
+        lblPuan.Text = toplamPuan.ToString();
+
+        soruTimer.Stop();
+        bilinenler.Add($"{aktifSoru.Ad} ({aktifSoru.Plaka})");
+        YeniSoruGetir();
+    }
+
     private void HataliCevapIslemi()
     {
-        // YANLIÞ VEYA SÜRE BÝTTÝ (-2 Puan)
+        comboCount = 0;
+        lblCombo.IsVisible = false; // COMBO BOZULDU, YAZIYI GÄ°ZLE
+
         toplamPuan -= 2;
         lblPuan.Text = toplamPuan.ToString();
 
@@ -147,13 +150,14 @@ public partial class GamePage : ContentPage
 
         YeniSoruGetir();
     }
+
     private async void OyunuBitir()
     {
         genelTimer.Stop();
         soruTimer.Stop();
 
-        // PUANI DA SONUÇ EKRANINA YOLLUYORUZ
-        await Navigation.PushAsync(new ResultPage(bilinenler, bilemediklerim, toplamPuan));
+        // A.b ADIMI: Oyuncu adÄ±nÄ± ve puanÄ±nÄ± ResultPage'e yolluyoruz
+        await Navigation.PushAsync(new ResultPage(bilinenler, bilemediklerim, toplamPuan, _oyuncuAdi));
         Navigation.RemovePage(this);
     }
 }
