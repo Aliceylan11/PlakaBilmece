@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
+using Microsoft.Maui.Devices; // TİTREŞİM (Vibration) İÇİN BU ŞART!
 using System;
 using System.Collections.Generic;
 
@@ -6,29 +7,26 @@ namespace PlakaBilmece;
 
 public partial class GamePage : ContentPage
 {
-    // Veriler
     List<Soru> soruHavuzu = new List<Soru>();
     List<string> bilinenler = new List<string>();
     List<string> bilemediklerim = new List<string>();
 
     Soru aktifSoru;
     string aktifMod;
-    string _oyuncuAdi; // A.b Adımı: İsmi burada tutuyoruz
+    string _oyuncuAdi;
     Random rnd = new Random();
 
-    // Zamanlayıcılar
     IDispatcherTimer genelTimer;
     IDispatcherTimer soruTimer;
 
     int genelSureSaniye = 120;
     int soruSureSaniye = 100;
     int toplamPuan = 0;
-    int comboCount = 0; // B Adımı: Seri (Combo) sayacı
+    int comboCount = 0;
 
-    // Constructor: Hem modu hem de oyuncu adını alıyor
     public GamePage(string mod, string oyuncuAdi)
     {
-        InitializeComponent();
+        InitializeComponent(); // BU SATIR XAML İSİMLERİNİ BAĞLAR!
         aktifMod = mod;
         _oyuncuAdi = oyuncuAdi;
 
@@ -103,15 +101,10 @@ public partial class GamePage : ContentPage
     {
         if (string.IsNullOrWhiteSpace(txtCevap.Text)) return;
 
-        // B ADIMI: Doğru mu Yanlış mı kontrolü burada birleşti
         if (txtCevap.Text == aktifSoru.Plaka)
-        {
             DogruCevapIslemi();
-        }
         else
-        {
             HataliCevapIslemi();
-        }
     }
 
     private void DogruCevapIslemi()
@@ -119,11 +112,10 @@ public partial class GamePage : ContentPage
         comboCount++;
         int kazanilanPuan = 5;
 
-        if (comboCount >= 3)
+        if (comboCount >= 5)
         {
-            kazanilanPuan = 10;
-            // COMBO ETİKETİNİ GÖSTER VE GÜNCELLE
-            lblCombo.Text = $"COMBO X{comboCount - 1} 🔥";
+            kazanilanPuan = 7;
+            lblCombo.Text = $"COMBO X{comboCount } 🔥";
             lblCombo.IsVisible = true;
         }
 
@@ -138,7 +130,7 @@ public partial class GamePage : ContentPage
     private void HataliCevapIslemi()
     {
         comboCount = 0;
-        lblCombo.IsVisible = false; // COMBO BOZULDU, YAZIYI GİZLE
+        lblCombo.IsVisible = false;
 
         toplamPuan -= 2;
         lblPuan.Text = toplamPuan.ToString();
@@ -156,7 +148,6 @@ public partial class GamePage : ContentPage
         genelTimer.Stop();
         soruTimer.Stop();
 
-        // A.b ADIMI: Oyuncu adını ve puanını ResultPage'e yolluyoruz
         await Navigation.PushAsync(new ResultPage(bilinenler, bilemediklerim, toplamPuan, _oyuncuAdi));
         Navigation.RemovePage(this);
     }
