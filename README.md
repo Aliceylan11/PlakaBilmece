@@ -62,7 +62,7 @@ Projeyi yerel ortamınızda çalıştırmak için:
 **Ali Ceylan**
 * Gümüşhane Üniversitesi - Bilgisayar Programcılığı
 * Kodlama ve Dijital Çözümler Kulübü Başkanı
-* [LinkedIn](https://www.linkedin.com/in/ali-ceylan-05/) | [GitHub](https://github.com/aliceylan11)
+* [LinkedIn](https://https://www.linkedin.com/in/aliceylan11/) | [GitHub](https://github.com/Aliceylan11)
 
 ---
 **v1.0.0 Tamamlandı - 2026**
