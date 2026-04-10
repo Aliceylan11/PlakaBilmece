@@ -1,38 +1,68 @@
-# PlakaBilmece Mobile
+# 🚗 PlakaBilmece Mobile - Türkiye'yi Plakalarla Keşfet!
 
-PlakaBilmece, Türkiye'nin 81 ilini ve bu illerin plaka kodlarını eğlenceli ve interaktif bir şekilde öğretmeyi amaçlayan, hız ve hafıza odaklı bir mobil bulmaca oyunudur. .NET MAUI teknolojisi ile modern mobil ihtiyaçlar göz önünde bulundurularak geliştirilmiştir.
+[![Framework](https://img.shields.io/badge/.NET-9.0_MAUI-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/en-us/apps/maui)
+[![Platform](https://img.shields.io/badge/Platform-Android_|_iOS-brightgreen)](https://dotnet.microsoft.com/en-us/apps/maui)
+[![Version](https://img.shields.io/badge/Version-v1.0.0--Stable-blue)](https://github.com/aliceylan11/plaka_bilmece)
 
-## 🎯 Oyun Deneyimi
-Kullanıcıya rastgele sunulan şehir isimlerinin plaka kodlarını doğru tahmin etmesi beklenir. Oyun, hem genel bir zaman baskısı hem de her soru için özel bir süre kısıtlaması ile heyecanı yüksek tutar.
+**PlakaBilmece**, Türkiye'nin 81 ilini ve plaka kodlarını eğlenceli, rekabetçi ve interaktif bir şekilde öğretmeyi amaçlayan modern bir mobil bulmaca oyunudur. .NET 9.0 MAUI ile geliştirilen uygulama, yüksek performans ve kullanıcı odaklı bir deneyim sunar.
 
-## 🚀 Öne Çıkan Özellikler
+---
 
-* **Dinamik Süre Sistemi:** 2 dakikalık toplam oyun süresinin yanı sıra, her soru için görsel bir `ProgressBar` ile takip edilen 10 saniyelik ek süre.
-* **Akıllı Puanlama:** Doğru tahminler için +5 puan eklenirken, hatalı tahminlerde -2 puan cezası ile stratejik düşünme teşvik edilir.
-* **Haptik Geri Bildirim (Vibration):** Yanlış cevap verildiğinde cihazın titremesi ile kullanıcıya anlık fiziksel geri bildirim sağlanır.
-* **UX Optimizasyonu:** * **Klavye Uyumu:** Plaka girişi için otomatik olarak sayısal klavye açılır.
-    * **ScrollView Yapısı:** Klavye açıldığında butonların ve içeriğin ekranda kaybolmasını engelleyen, özellikle uzun ekranlı cihazlar (örn. Xiaomi/Redmi serisi) için optimize edilmiş arayüz.
-* **Görsel Tasarım:** Koyu tema (Dark Mode) uyumlu modern arayüz ve özel tasarım uygulama ikonu.
+## 🎯 Oyun Deneyimi ve Mekanikler
+
+Uygulama, sadece bir test değil; hafızayı zorlayan ve anlık karar verme becerilerini geliştiren bir sistem üzerine kuruludur:
+
+* **Zaman Baskısı:** 2 dakikalık (`120 saniye`) toplam süre ile yarışırken, her soru için dinamik bir `ProgressBar` ile takip edilen `10 saniyelik` mikro süreler heyecanı canlı tutar.
+* **Akıllı Combo Sistemi (🔥):** Üst üste **5 doğru** tahmin yapıldığında aktifleşen Combo modu, oyuncuyu ödüllendirir. Combo serisi boyunca puan kazanımı **+5'ten +7'ye** çıkar.
+* **Haptik Geri Bildirim:** Yanlış cevaplarda veya süre bitiminde tetiklenen **Vibration (Titreşim)** motoru, kullanıcıya fiziksel bir geri bildirim sağlayarak deneyimi zenginleştirir.
+* **Detaylı Analiz:** Oyun sonunda oyuncunun hangi illeri bildiği, hangilerinde takıldığı liste halinde sunularak öğrenme süreci desteklenir.
+
+## 🚀 Öne Çıkan Teknik Özellikler
+
+* **UX Optimizasyonu:** `ScrollView` yapısı sayesinde klavye açıldığında tasarımın bozulması engellenmiştir. Özellikle Xiaomi, Redmi ve benzeri uzun ekranlı cihazlar için tam uyumludur.
+* **Dinamik Veri Yönetimi:** İller ve ilçeler için optimize edilmiş veri havuzu (`Veritabani.cs`) ile anlık soru üretimi.
+* **Cross-Platform:** Tek bir C# kod tabanı ile hem Android hem de iOS için yerel performans.
+* **Dark Mode Support:** Gece kullanımına uygun, göz yormayan modern koyu tema tasarımı.
 
 ## 🛠️ Teknik Altyapı
 
-* **Framework:** .NET 9.0 MAUI
-* **Programlama Dili:** C#
-* **Platformlar:** Android (API 24+), iOS
-* **Derleme Yapısı:** Tüm işlemci mimarilerini (ARM64, X86 vb.) destekleyen evrensel APK paketleme sistemi.
-
-## 🎮 Nasıl Oynanır?
-
-1.  Uygulamayı başlatın ve Başlat  butonuna tıklayın.
-2.  Ekranda beliren şehrin plaka kodunu aşağıdaki kutucuğa girin.
-3.  "CEVAPLA" butonuna basarak puanınızı artırın.
-4.  Süre bitmeden en yüksek skora ulaşmaya çalışın!
-
-## ⚙️ Geliştirici İçin Kurulum
-
-1.  Depoyu klonlayın.
-2.  Visual Studio 2022 (v17.12 veya üstü) ile projeyi açın.
-3.  `.NET 9` SDK'sının yüklü olduğundan emin olun.
-4.  Derleme modunu `Release` yaparak kendi APK'nızı oluşturun.
+* **Framework:** .NET 9.0 (MAUI)
+* **Dil:** C#
+* **Mimari:** MVVM Pattern (Model-View-ViewModel) esintileriyle güçlendirilmiş yapı.
+* **Paketleme:** `android-arm64` ve `x86_64` mimarilerini kapsayan evrensel APK çıktısı.
 
 ---
+
+
+## ⚙️ Kurulum ve Derleme
+
+Projeyi yerel ortamınızda çalıştırmak için:
+
+1.  Bu depoyu klonlayın: `git clone https://github.com/aliceylan11/plaka_bilmece.git`
+2.  **Visual Studio 2022 (v17.12+)** ile `.sln` dosyasını açın.
+3.  **Workloads:** ".NET Multi-platform App UI development" yükünün kurulu olduğundan emin olun.
+4.  **Derleme:**
+    * Windows üzerinden denemek için hedefi `Windows Machine` seçin.
+    * APK almak için terminale şu komutu girin:
+    ```powershell
+    dotnet publish -f net9.0-android -c Release -p:AndroidPackageFormat=apk -p:RuntimeIdentifier=android-arm64 -p:AndroidKeyStore=false
+    ```
+
+## 📈 v2 Planları (Roadmap)
+
+- [ ] Online Skor Tablosu (Leaderboard).
+- [ ] Türkiye Haritası üzerinde görsel tahmin modu.
+- [ ] Ses efektleri ve sesli soru okuma özelliği.
+- [ ] Farklı zorluk seviyeleri (Bölgelere göre ayırma).
+
+---
+
+## 👨‍💻 Geliştirici
+
+**Ali Ceylan**
+* Gümüşhane Üniversitesi - Bilgisayar Programcılığı
+* Kodlama ve Dijital Çözümler Kulübü Başkanı
+* [LinkedIn](https://www.linkedin.com/in/ali-ceylan-05/) | [GitHub](https://github.com/aliceylan11)
+
+---
+**v1.0.0 Tamamlandı - 2026**
